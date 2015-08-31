@@ -30,7 +30,7 @@ module Tablexi
 
       message = []
       message << (exception_or_message.respond_to?(:message) ? exception_or_message.message : exception_or_message)
-      message << options.map { |k, v| "#{k}: #{v}"} if options.size > 0
+      message << options.map { |k, v| "#{k}: #{v}" } if options.size > 0
       message << exception_or_message.backtrace if exception_or_message.respond_to?(:backtrace)
 
       logger.error message.flatten.join("\n")
@@ -40,7 +40,9 @@ module Tablexi
 
     private
 
-    private def logger; @logger end
+    def logger
+      @logger
+    end
 
     if defined?(Rollbar)
       def notice_error(error, options)
@@ -55,7 +57,7 @@ module Tablexi
     end
 
     def humanize_request_metadata(options)
-      return unless options.has_key? :request
+      return unless options.key? :request
 
       request = options.delete :request
       body = request.body.read

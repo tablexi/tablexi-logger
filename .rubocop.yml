@@ -1,0 +1,39 @@
+AllCops:
+  Exclude:
+    - ".bundle/**/*" # Auto-generated
+    - "bin/**/*"     # Auto-generated
+    - "vendor/**/*"  # We cannot solve the world's problems
+    - "tablexi-logger.gemspec" # just not worth it
+
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 20
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/TrailingComma:
+  EnforcedStyleForMultiline: comma
+
+Style/TrivialAccessors:
+  ExactNameMatch: true
