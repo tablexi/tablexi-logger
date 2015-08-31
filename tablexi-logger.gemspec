@@ -1,7 +1,7 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'tablexi/logger/version'
+require "tablexi/logger/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "tablexi-logger"
@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Bradley Schaefer"]
   spec.email         = ["bradley@tablexi.com"]
 
-  spec.summary       = %q{A simple logging wrapper to use in Table XI applications.}
-  spec.description   = %q{Provides a single interface for logging so that applications do not need to be aware of NewRelic, Rollbar, or whatever else.}
+  spec.summary       = "A simple logging wrapper to use in Table XI applications."
+  spec.description   = "Provides a single interface for logging so that applications do not need to be aware of NewRelic, Rollbar, or whatever else."
   spec.homepage      = "https://github.com/tablexi/tablexi-logger"
   spec.license       = "MIT"
 
@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   # delete this section to allow pushing this gem to any host.
   if spec.respond_to?(:metadata)
     # prevent pushing this to RubyGems.org
-    spec.metadata['allowed_push_host'] = "http://gems.tablexi.com"
+    spec.metadata["allowed_push_host"] = "http://gems.tablexi.com"
   else
     raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
   end
@@ -32,4 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.2"
   spec.add_development_dependency "rspec_junit_formatter"
+  spec.add_development_dependency "rubocop"
 end

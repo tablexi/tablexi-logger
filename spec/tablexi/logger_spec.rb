@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Tablexi::Logger do
   def with_logger(logger)
