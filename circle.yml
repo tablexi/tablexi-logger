@@ -1,6 +1,9 @@
 machine:
   ruby:
     version: 2.1.4
+dependencies:
+  pre:
+    - gem install bundler --pre
 test:
   override:
     - bundle exec rspec --order rand -fd --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec.xml:
