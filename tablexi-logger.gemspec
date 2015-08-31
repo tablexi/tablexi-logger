@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "tablexi-logger"
   spec.version       = Tablexi::Logger::VERSION
   spec.authors       = ["Bradley Schaefer"]
-  spec.email         = ["bradley.schaefer@gmail.com"]
+  spec.email         = ["bradley@tablexi.com"]
 
   spec.summary       = %q{A simple logging wrapper to use in Table XI applications.}
   spec.description   = %q{Provides a single interface for logging so that applications do not need to be aware of NewRelic, Rollbar, or whatever else.}
