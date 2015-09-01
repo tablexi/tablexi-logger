@@ -33,11 +33,11 @@ a `Tablexi::Logger::OptionFilter::HumanizeRequest` is provided by default, which
 takes any `options[:request]` value and splits out the interesting parts such as
 request method and body, and excludes the spammy parts such as headers.
 
-Option filters may be configured via the `Tablexi::Logger#options_filters` array
+Option filters may be configured via the `Tablexi::Logger#option_filters` array
 with a callable:
 
 ```ruby
-Tablexi.logger.options_filters << ->(options) { options.delete(:password) }  
+Tablexi.logger.option_filters << ->(options) { options.delete(:password) }  
 ```
 
 ### Registering logging handlers
@@ -46,6 +46,11 @@ Custom logging handlers implement callable and may be registered by log level (e
 
 ```ruby
 Tablexi.logger.handlers[:debug] << ->(error, options) { puts [error, options].join("\n") }
+
+# Or to register multiple severities at once
+Tablexi.logger.handle [:debug, :warn, :info] do |*args|
+  puts args.join("\n")
+end
 ```
 
 ## License

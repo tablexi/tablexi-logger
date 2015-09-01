@@ -19,12 +19,11 @@ module Tablexi
       Logger.new.tap do |logger|
         logger.option_filters << Tablexi::Logger::OptionFilter::HumanizeRequest
         Tablexi::Logger::SEVERITIES.each do |severity|
-          logger.handler_mapping[severity] << Tablexi::Logger::Standard.new(base_logger, severity: severity)
+          logger.handlers[severity] << Tablexi::Logger::Standard.new(base_logger, severity: severity)
         end
-        %i(error fatal unknown).each do |severity|
-          logger.handler_mapping[severity] << Tablexi::Logger::Rollbar if defined?(::Rollbar)
-          logger.handler_mapping[severity] << Tablexi::Logger::NewRelic if defined?(::NewRelic)
-        end
+        trackable_severities = %i(error fatal unknown)
+        logger.handle trackable_severities, &Tablexi::Logger::Rollbar if defined?(::Rollbar)
+        logger.handle trackable_severities, &Tablexi::Logger::NewRelic if defined?(::NewRelic)
       end
     end
 
@@ -41,11 +40,18 @@ module Tablexi
     include Severities
 
     attr_reader :option_filters
-    attr_reader :handler_mapping
+    attr_reader :handlers
 
     def initialize
       @option_filters = []
-      @handler_mapping = Hash.new { |h, k| h[k] = [] }
+      @handlers = Hash.new { |h, k| h[k] = [] }
+    end
+
+    def handle(severities, &block)
+      raise ArgumentError, "Missing block argument" unless block_given?
+      raise ArgumentError, "lambda must take 2 arguments: `error, options`" if block.lambda? && block.arity.abs != 2
+
+      Array(severities).each { |severity| handlers[severity] << block }
     end
 
     SEVERITIES.each do |severity|
@@ -58,12 +64,12 @@ module Tablexi
 
     def log(severity, exception_or_message, options)
       process_option_filters(options)
-      handler_mapping[severity].each do |handler|
+      handlers[severity].each do |handler|
         handler.call(exception_or_message, options)
       end
       nil
     rescue StandardError => e
-      if options[:tablexi_logger_error]
+      if options.key? :tablexi_logger_error
         raise # recursion prevention
       else
         error(e, tablexi_logger_error: true)
@@ -71,9 +77,7 @@ module Tablexi
     end
 
     def process_option_filters(options)
-      # rubocop:disable Style/SingleLineBlockParams
       option_filters.each_with_object(options) { |filter, opts| filter.call(opts) }
-      # rubocop:enable Style/SingleLineBlockParams
     end
   end
 end
