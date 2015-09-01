@@ -1,21 +1,24 @@
 # Tablexi::Logger
 
-A standardized logging interface for Table XI applications.
+Standardized logging for Table XI applications.
+
 The default behavior will log to `Rails.logger` or fallback to `::Logger.new($stdout)` if
 Rails is not available. If [Rollbar](https://rollbar.com/) or [NewRelic](http://newrelic.com/)
-are available, logging will also send events to the available service.
+are available, logging will also send events to the available service for log levels `error`
+or higher.
 
 ## Usage
 
 Basic usage looks like this:
 
 ```ruby
+Tablexi.logger.warn "Missing configuration, using default"
 Tablexi.logger.error "Bad Things Happened"
 Tablexi.logger.error "Bad Request", request: request
 Tablexi.logger.error "Request Timeout", metric: :timeout_error
 ```
 
-You may also set the logger, for example configuring a null logger would look like this:
+You may also assign the logger, for example configuring a null logger would look like this:
 
 ```ruby
 Tablexi.logger = ::Logger.new(File.open(File::NULL, "w"))
@@ -23,19 +26,26 @@ Tablexi.logger = ::Logger.new(File.open(File::NULL, "w"))
 
 ## Extending Functionality
 
-Applications may wish to customize logging – you can achieve this through monkeypatching
-something like this:
+### Options Filtering
+
+Applications may wish to modify the options passed to error handlers - for example
+a `Tablexi::Logger::OptionFilter::HumanizeRequest` is provided by default, which
+takes any `options[:request]` value and splits out the interesting parts such as
+request method and body, and excludes the spammy parts such as headers.
+
+Option filters may be configured via the `Tablexi::Logger#options_filters` array
+with a callable:
 
 ```ruby
-module LoggerWarning
-  def warn(error, options = {})
-    logger.warn error # logger exposes the underlying ::Logger
-    notice_error(error, options.merge(priority: :warning) # notice_error handles error tracking service
-  end
-end
+Tablexi.logger.options_filters << ->(options) { options.delete(:password) }  
+```
 
-Tablexi::Logger.include LoggerWarning
-Tablexi.logger.warn "You have been warned"
+### Registering logging handlers
+
+Custom logging handlers implement callable and may be registered by log level (e.g. `:debug`):
+
+```ruby
+Tablexi.logger.handlers[:debug] << ->(error, options) { puts [error, options].join("\n") }
 ```
 
 ## License
