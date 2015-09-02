@@ -49,7 +49,6 @@ module Tablexi
 
     def handle(severities, &block)
       raise ArgumentError, "Missing block argument" unless block_given?
-      raise ArgumentError, "lambda must take 2 arguments: `error, options`" if block.lambda? && block.arity.abs != 2
 
       Array(severities).each { |severity| handlers[severity] << block }
     end
