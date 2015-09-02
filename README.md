@@ -21,7 +21,7 @@ Tablexi.logger.error "Request Timeout", metric: :timeout_error
 You may also assign the logger, for example configuring a null logger would look like this:
 
 ```ruby
-Tablexi.logger = ::Logger.new(File.open(File::NULL, "w"))
+Tablexi.logger = Tablexi::Logger.new # not configured with any handlers, so does nothing
 ```
 
 ## Extending Functionality
