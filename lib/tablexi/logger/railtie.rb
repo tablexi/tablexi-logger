@@ -12,7 +12,7 @@ module Tablexi
         # we need to make sure the setup occurs before we check lograge.logger
         Lograge.setup(app)
 
-        return unless app.config.lograge.logger == Rails.logger
+        return unless Lograge::RequestLogSubscriber.new.logger == Rails.logger
 
         # We need to preserve lograge file format integrity if lograge is using
         # Rails.logger - presumably error tracking services will report the errors
