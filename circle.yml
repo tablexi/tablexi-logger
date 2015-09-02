@@ -8,3 +8,5 @@ test:
   override:
     - bundle exec rspec --order rand -fd --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec.xml:
         parallel: true
+  post:
+    - bundle exec rubocop
