@@ -10,6 +10,7 @@ require "tablexi/logger/option_filter/humanize_request"
 module Tablexi
   class << self
     attr_writer :logger
+    attr_writer :bare_logger
 
     def logger
       @logger ||= default_logger
@@ -18,9 +19,11 @@ module Tablexi
     def default_logger(base_logger = bare_logger)
       Logger.new.tap do |logger|
         logger.option_filters << Tablexi::Logger::OptionFilter::HumanizeRequest
+
         Tablexi::Logger::SEVERITIES.each do |severity|
           logger.handlers[severity] << Tablexi::Logger::Standard.new(base_logger, severity: severity)
         end
+
         trackable_severities = %i(error fatal unknown)
         logger.handle trackable_severities, &Tablexi::Logger::Rollbar if defined?(::Rollbar)
         logger.handle trackable_severities, &Tablexi::Logger::NewRelic if defined?(::NewRelic)
@@ -28,9 +31,8 @@ module Tablexi
     end
 
     private def bare_logger
-      Rails.logger
-    rescue NameError
-      ::Logger.new($stdout).tap do |config|
+      return @bare_logger if @bare_logger
+      @bare_logger = ::Logger.new($stdout).tap do |config|
         config.level = ::Logger::DEBUG
       end
     end
@@ -80,3 +82,5 @@ module Tablexi
     end
   end
 end
+
+require "tablexi/logger/railtie" if defined?(Rails)
