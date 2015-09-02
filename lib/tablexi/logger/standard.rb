@@ -15,7 +15,7 @@ module Tablexi
         @severity = severity
       end
 
-      def call(exception_or_message, options = {})
+      def call(exception_or_message, options)
         logger.public_send severity, generate_log(exception_or_message, options)
       end
 
