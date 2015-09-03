@@ -1,6 +1,6 @@
 # Tablexi::Logger
 
-[![Circle CI](https://circleci.com/gh/tablexi/tablexi-logger.svg?style=shield)](https://circleci.com/gh/tablexi/tablexi-logger)
+[![Gem Version](https://badge.fury.io/rb/tablexi-logger.svg)](http://badge.fury.io/rb/tablexi-logger) [![Circle CI](https://circleci.com/gh/tablexi/tablexi-logger.svg?style=shield)](https://circleci.com/gh/tablexi/tablexi-logger)
 
 Standardized logging for Table XI applications.
 
