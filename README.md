@@ -1,5 +1,7 @@
 # Tablexi::Logger
 
+[![Circle CI](https://circleci.com/gh/tablexi/tablexi-logger.svg?style=shield)](https://circleci.com/gh/tablexi/tablexi-logger)
+
 Standardized logging for Table XI applications.
 
 The default behavior will log to `Rails.logger` or fallback to `::Logger.new($stdout)` if
