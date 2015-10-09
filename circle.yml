@@ -1,12 +1,23 @@
 machine:
   ruby:
-    version: 2.2.2
+    version: 2.2.3
 dependencies:
-  pre:
-    - gem install bundler --pre
+  cache_directories:
+    - 'vendor/bundle'
+  override:
+    - rvm-exec 2.2.3 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+    - rvm-exec 2.1.6 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+    - rvm-exec 2.0.0-p645 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
+    - rvm-exec 1.9.3-p551 bash -c "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle"
 test:
   override:
-    - bundle exec rspec --order rand -fd --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec.xml:
+    - rvm-exec 2.2.3 bash -c "bundle exec rspec --order rand -fd --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec-2_2_3.xml":
+        parallel: true
+    - rvm-exec 2.1.6 bash -c "bundle exec rspec --order rand -fd --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec-2_1_6.xml":
+        parallel: true
+    - rvm-exec 2.0.0-p645 bash -c "bundle exec rspec --order rand -fd --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec-2_0_0.xml":
+        parallel: true
+    - rvm-exec 1.9.3-p551 bash -c "bundle exec rspec --order rand -fd --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec-1_9_3.xml":
         parallel: true
   post:
     - bundle exec rubocop
