@@ -8,7 +8,9 @@ module Tablexi
       attr_reader :logger
       attr_reader :severity
 
-      def initialize(logger, options = { severity: :unknown })
+      def initialize(logger, options = {})
+        defaults = { severity: :unknown }
+        options = defaults.merge(options)
         severity = options[:severity]
         raise ArgumentError, "Severity `#{severity}` must be one of #{SEVERITIES}" unless SEVERITIES.include?(severity)
 
