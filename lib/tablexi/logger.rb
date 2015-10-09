@@ -24,13 +24,15 @@ module Tablexi
           logger.handlers[severity] << Tablexi::Logger::Standard.new(base_logger, severity: severity)
         end
 
-        trackable_severities = %i(error fatal unknown)
+        trackable_severities = [:error, :fatal, :unknown]
         logger.handle trackable_severities, &Tablexi::Logger::Rollbar if defined?(::Rollbar)
         logger.handle trackable_severities, &Tablexi::Logger::NewRelic if defined?(::NewRelic)
       end
     end
 
-    private def bare_logger
+    private
+
+    def bare_logger
       return @bare_logger if @bare_logger
       @bare_logger = ::Logger.new($stdout).tap do |config|
         config.level = ::Logger::DEBUG
@@ -57,7 +59,7 @@ module Tablexi
 
     SEVERITIES.each do |severity|
       define_method(severity) do |exception_or_message, options = {}|
-        log(severity, exception_or_message, Hash(options))
+        log(severity, exception_or_message, Hash[options])
       end
     end
 

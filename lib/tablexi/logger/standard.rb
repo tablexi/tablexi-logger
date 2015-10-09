@@ -8,7 +8,10 @@ module Tablexi
       attr_reader :logger
       attr_reader :severity
 
-      def initialize(logger, severity: :unknown)
+      def initialize(logger, options = {})
+        defaults = { severity: :unknown }
+        options = defaults.merge(options)
+        severity = options[:severity]
         raise ArgumentError, "Severity `#{severity}` must be one of #{SEVERITIES}" unless SEVERITIES.include?(severity)
 
         @logger = logger
@@ -22,7 +25,7 @@ module Tablexi
       private
 
       def generate_log(exception_or_message, options)
-        options = Hash(options)
+        options = Hash[options]
 
         message = []
         message << (exception_or_message.respond_to?(:message) ? exception_or_message.message : exception_or_message)
