@@ -1,4 +1,6 @@
-# Tablexi::Logger
+# Tablexi::Logger [DEPRECATED]
+
+### This gem has been deprecated. Please use Rollbar or some other logging tool. 
 
 [![Gem Version](https://badge.fury.io/rb/tablexi-logger.svg)](http://badge.fury.io/rb/tablexi-logger) [![Circle CI](https://circleci.com/gh/tablexi/tablexi-logger.svg?style=shield)](https://circleci.com/gh/tablexi/tablexi-logger)
 
